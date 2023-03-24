@@ -1,0 +1,38 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+# INSTALL UPDATES
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+# CREATE AND SET UP USER, PET
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create user Pet
+    tags: always
+    user:
+      name: Pet
+      group: root
+
+  - name: add ssh key for Pet
+    tags: always
+    authorized_key:
+      user: Pet
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKTrYPjM1x5HsCWGAwSrchhkKDcBWXsbkF81WS962x5X kenny ansible"
+
+  - name: add sudoers file for Pet
+    copy:
+      src: sudoer_Pet
+      dest: /etc/sudoers.d/Pet
+      owner: root
+      group: root
+      mode: 0440

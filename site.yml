@@ -2,14 +2,26 @@
 
 - hosts: all
   become: true
-  tasks:
-  - name: install updates (Ubuntu)
+  pre_tasks:
+
+# UPDATE CACHE
+  - name: update repo cache (Ubuntu)
     tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
 
+# ADD SSH KEY FOR USER, PET
+- hosts: all
+  become: true
+  tasks:
+
+  - name: add ssh key for Pet
+    tags: always
+    authorized_key:
+      user: Pet
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKTrYPjM1x5HsCWGAwSrchhkKDcBWXsbkF81WS962x5X kenny ansible"
 
 # - hosts: workstations
 #  become: true
@@ -27,7 +39,7 @@
 #      owner: root
 #      group: root
 
-
+# INSTALL APACHE AND PHP PACKAGES TO WEB SERVER
 - hosts: web_servers
   become: true
   tasks:
@@ -49,7 +61,7 @@
       group: root
       mode: 0644
 
-
+# INSTALL MARIADB PACKAGE TO DATABASE
 - hosts: db_servers
   become: true
   tasks:
