@@ -3,7 +3,6 @@
 - hosts: all
   become: true
   tasks:
-
   - name: install updates (Ubuntu)
     tags: always
     apt:
@@ -14,7 +13,6 @@
 - hosts: web_servers
   become: true
   tasks:
-
   - name: install apache2 and php packages on Ubuntu server
     tags: apache, apache2, ubuntu
     apt:
@@ -24,11 +22,18 @@
       state: latest
     when: ansible_distribution == "Ubuntu"
 
+  - name: copy default html file for site
+    tags: apache, apache2, ubuntu
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
 
 - hosts: db_servers
   become: true
   tasks:
-
   - name: install mariadb package on Ubuntu server
     tags: db, mariadb, ubuntu
     apt:
