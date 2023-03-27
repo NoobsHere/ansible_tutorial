@@ -1,0 +1,4 @@
+- name: add ssh key for Pet
+  authorized_key:
+    user: Pet
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKTrYPjM1x5HsCWGAwSrchhkKDcBWXsbkF81WS962x5X kenny ansible"
